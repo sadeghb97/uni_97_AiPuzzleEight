@@ -13,7 +13,7 @@ public class PENode {
     private static final String DIGIT_COLOR = StylishPrinter.ANSI_BOLD_PURPLE; 
     private static final String SPLITTER_COLOR = StylishPrinter.ANSI_BOLD_CYAN; 
     
-    private List<PENode> childNodes;
+    //private List<PENode> childNodes;
     private PENode fatherNode;
     private int[][] puzzle;
     private int rowZero;
@@ -22,7 +22,7 @@ public class PENode {
 
     public PENode() {
         depth=0;
-        childNodes = new ArrayList<>();
+        //childNodes = new ArrayList<>();
     }
 
     public PENode(PENode fatherNode, int[][] puzzle, int rowZero, int colZero) {
@@ -31,16 +31,16 @@ public class PENode {
         this.puzzle = puzzle;
         this.rowZero = rowZero;
         this.colZero = colZero;
-        childNodes = new ArrayList<>();
+        //childNodes = new ArrayList<>();
     }
 
     public PENode getFatherNode() {
         return fatherNode;
     }
 
-    public List<PENode> getChildNodes() {
+    /*public List<PENode> getChildNodes() {
         return childNodes;
-    }
+    }*/
 
     public int[][] getPuzzleArray() {
         return puzzle;
@@ -63,7 +63,7 @@ public class PENode {
     }
     
     public PENode unlink(){
-        childNodes = new ArrayList<>();
+        //childNodes = new ArrayList<>();
         fatherNode = null;
         return this;
     }
@@ -77,7 +77,10 @@ public class PENode {
         return puzzleArray;
     }
     
-    public void setRandomPuzzle(int moveNum, int finalState){
+    public void setRandomPuzzle(int finalState){
+        System.out.print("\nEnter Number Of Random Puzzle Rotation: ");
+        int moveNum = SbproScanner.inputInt(1, 100);
+        
         int[][] puzzleArray;
         int row,col;
         
@@ -125,8 +128,10 @@ public class PENode {
             }
         }
         
-        childNodes = new ArrayList<>();
+        //childNodes = new ArrayList<>();
         fatherNode = null;
+        StylishPrinter.println("\nGenerated Puzzle:", StylishPrinter.ANSI_BOLD_GREEN);
+        printPuzzle();
     }
     
     public void inputPuzzle(){
@@ -313,7 +318,7 @@ public class PENode {
         
         PENode child = new PENode(this, puzzleArray, row, col);
         child.setDepth(depth+1);
-        childNodes.add(child);
+        //childNodes.add(child);
         return child;
     }
     
@@ -329,7 +334,7 @@ public class PENode {
         col = colZero+1;
         
         PENode child = new PENode(this, puzzleArray, row, col);
-        childNodes.add(child);
+        //childNodes.add(child);
         child.setDepth(depth+1);
         return child;
     }
@@ -346,7 +351,7 @@ public class PENode {
         col = colZero;
         
         PENode child = new PENode(this, puzzleArray, row, col);
-        childNodes.add(child);
+        //childNodes.add(child);
         child.setDepth(depth+1);
         return child;
     }
@@ -363,7 +368,7 @@ public class PENode {
         col = colZero;
         
         PENode child = new PENode(this, puzzleArray, row, col);
-        childNodes.add(child);
+        //childNodes.add(child);
         child.setDepth(depth+1);
         return child;
     }

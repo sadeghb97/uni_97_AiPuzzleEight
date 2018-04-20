@@ -56,8 +56,7 @@ public class SolvePuzzle {
         
         if(down!=null) return down;
         
-        if(node.getFatherNode()!=null)
-            node.getFatherNode().getChildNodes().remove(node);
+        //if(node.getFatherNode()!=null) node.getFatherNode().getChildNodes().remove(node);
         node.unlink();
         node = null;
         
