@@ -58,6 +58,18 @@ public class PuzzleEight {
         }
     }
     
+    public static void AStarSolvePuzzle(){
+        long startTime = System.nanoTime();
+        PENode resultNode = SolvePuzzle.solveWithAStar(currentPuzzle.unlink());
+        long endTime = System.nanoTime();
+        double secTime = (double)(endTime - startTime)/1000000000;
+        
+        StylishPrinter.println("\nPuzzle Solve Successfuly Using A*!", StylishPrinter.ANSI_BOLD_GREEN);
+        System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
+        StylishPrinter.println("\nSolving Routine:", StylishPrinter.ANSI_BOLD_GREEN);
+        resultNode.printRoutine();
+    }
+    
     public static boolean menu(){
         StylishPrinter.println("\nMenu:", StylishPrinter.ANSI_BOLD_RED);
         System.out.println("1: Show Current Puzzle");
@@ -66,9 +78,10 @@ public class PuzzleEight {
         System.out.println("4: Solve Puzzle With BFS");
         System.out.println("5: Solve Puzzle With IDS");
         System.out.println("6: Solve Puzzle With DLS");
-        System.out.println("7: Exit");
+        System.out.println("7: Solve Puzzle With A*");
+        System.out.println("8: Exit");
         System.out.print("\nEnter Your Choice: ");
-        int choice = SbproScanner.inputInt(1, 7);
+        int choice = SbproScanner.inputInt(1, 8);
         
         if(choice==1){
             StylishPrinter.println("\nCurrent Puzzle:", StylishPrinter.ANSI_BOLD_RED);
@@ -79,7 +92,8 @@ public class PuzzleEight {
         else if(choice==4) bfsSolvePuzzle();
         else if(choice==5) idsSolvePuzzle();
         else if(choice==6) dlsSolvePuzzle();
-        else if(choice==7) return false;
+        else if(choice==7) AStarSolvePuzzle();
+        else if(choice==8) return false;
         
         return true;
     }

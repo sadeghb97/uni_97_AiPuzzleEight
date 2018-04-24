@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -10,7 +11,7 @@ public class SolvePuzzle {
         Queue<PENode> queue = new LinkedList<PENode>();
         queue.add(node);
         
-        while(true){
+        while(queue.size() != 0){
             PENode parent = queue.poll();
             if(parent.isSolved()) return parent;
 
@@ -19,6 +20,26 @@ public class SolvePuzzle {
             if(parent.canUpMove()) queue.add(parent.setUpMoveChild());
             if(parent.canDownMove()) queue.add(parent.setDownMoveChild());
         }
+        
+        return null;
+    }
+    
+    public static PENode solveWithAStar(PENode node){
+        PriorityQueue<PENode> queue = 
+            new PriorityQueue<PENode>(new PENode.AStarComparator());
+        queue.add(node);
+        
+        while(queue.size() != 0){
+            PENode parent = queue.remove();
+            if(parent.isSolved()) return parent;
+
+            if(parent.canLeftMove()) queue.add(parent.setLeftMoveChild(true));
+            if(parent.canRightMove()) queue.add(parent.setRightMoveChild(true));
+            if(parent.canUpMove()) queue.add(parent.setUpMoveChild(true));
+            if(parent.canDownMove()) queue.add(parent.setDownMoveChild(true));
+        }
+        
+        return null;
     }
     
     public static PENode solveWithDLS(PENode node, int l){

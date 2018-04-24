@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -8,6 +9,9 @@ import java.util.Stack;
 public class PENode {
     public static final int FIRST_FINAL_STATE = 1;
     public static final int SECOND_FINAL_STATE = 2;
+    
+    public static final int[][] FIRST_GOAL_ARRAY = new int[][]{new int[]{1,2,3}, new int[]{4,5,6}, new int[]{7,8,0}};
+    public static final int[][] SECOND_GOAL_ARRAY= new int[][]{new int[]{0,1,2}, new int[]{3,4,5}, new int[]{6,7,8}};
     
     private static final String FRAME_COLOR = StylishPrinter.ANSI_BOLD_CYAN; 
     private static final String DIGIT_COLOR = StylishPrinter.ANSI_BOLD_PURPLE; 
@@ -19,6 +23,7 @@ public class PENode {
     private int rowZero;
     private int colZero;
     private int depth;
+    private int heuristic;
 
     public PENode() {
         depth=0;
@@ -62,6 +67,14 @@ public class PENode {
         this.depth = depth;
     }
     
+    public int getHeuristic() {
+        return heuristic;
+    }
+    
+    public void setHeuristic(int heuristic) {
+        this.heuristic = heuristic;
+    }
+    
     public PENode unlink(){
         //childNodes = new ArrayList<>();
         fatherNode = null;
@@ -79,18 +92,18 @@ public class PENode {
     
     public void setRandomPuzzle(int finalState){
         System.out.print("\nEnter Number Of Random Puzzle Rotation: ");
-        int moveNum = SbproScanner.inputInt(1, 100);
+        int moveNum = SbproScanner.inputInt(1, 200);
         
         int[][] puzzleArray;
         int row,col;
         
         if(finalState == FIRST_FINAL_STATE){
-            puzzleArray = new int[][]{new int[]{1,2,3}, new int[]{4,5,6}, new int[]{7,8,0}};
+            puzzleArray = FIRST_GOAL_ARRAY;
             row = 2;
             col = 2;
         }
         else{
-            puzzleArray = new int[][]{new int[]{0,1,2}, new int[]{3,4,5}, new int[]{6,7,8}};
+            puzzleArray = SECOND_GOAL_ARRAY;
             row=0;
             col=0;
         }
@@ -182,6 +195,27 @@ public class PENode {
         }
         
         puzzle[row][col] = result;
+    }
+    
+    public int calcHeuristic(){
+        int res=0;
+        for(int i=0; 3>i; i++){
+            for(int j=0; 3>j; j++){
+                int plus = 0;
+                if(puzzle[i][j]==1) plus=(Math.abs(i-0)+Math.abs(j-0));
+                else if(puzzle[i][j]==2) plus=(Math.abs(i-0)+Math.abs(j-1));
+                else if(puzzle[i][j]==3) plus=(Math.abs(i-0)+Math.abs(j-2));
+                else if(puzzle[i][j]==4) plus=(Math.abs(i-1)+Math.abs(j-0));
+                else if(puzzle[i][j]==5) plus=(Math.abs(i-1)+Math.abs(j-1));
+                else if(puzzle[i][j]==6) plus=(Math.abs(i-1)+Math.abs(j-2));
+                else if(puzzle[i][j]==7) plus=(Math.abs(i-2)+Math.abs(j-0));
+                else if(puzzle[i][j]==8) plus=(Math.abs(i-2)+Math.abs(j-1));
+                else if(puzzle[i][j]==0) plus=(Math.abs(i-2)+Math.abs(j-2));
+                res+=plus;
+            }
+        }
+        
+        return res;
     }
     
     public boolean isSolved(){
@@ -305,7 +339,7 @@ public class PENode {
         return true;
     }
     
-    public PENode setLeftMoveChild(){
+    public PENode setLeftMoveChild(boolean calcHeuristic){
         if(!canLeftMove()) return null;
         int[][] puzzleArray = getPuzzleArrayClone();
         int row,col;
@@ -318,11 +352,12 @@ public class PENode {
         
         PENode child = new PENode(this, puzzleArray, row, col);
         child.setDepth(depth+1);
+        if(calcHeuristic) child.setHeuristic(child.calcHeuristic());
         //childNodes.add(child);
         return child;
     }
     
-    public PENode setRightMoveChild(){
+    public PENode setRightMoveChild(boolean calcHeuristic){
         if(!canRightMove()) return null;
         int[][] puzzleArray = getPuzzleArrayClone();
         int row,col;
@@ -336,10 +371,11 @@ public class PENode {
         PENode child = new PENode(this, puzzleArray, row, col);
         //childNodes.add(child);
         child.setDepth(depth+1);
+        if(calcHeuristic) child.setHeuristic(child.calcHeuristic());
         return child;
     }
     
-    public PENode setUpMoveChild(){
+    public PENode setUpMoveChild(boolean calcHeuristic){
         if(!canUpMove()) return null;
         int[][] puzzleArray = getPuzzleArrayClone();
         int row,col;
@@ -353,10 +389,11 @@ public class PENode {
         PENode child = new PENode(this, puzzleArray, row, col);
         //childNodes.add(child);
         child.setDepth(depth+1);
+        if(calcHeuristic) child.setHeuristic(child.calcHeuristic());
         return child;
     }
     
-    public PENode setDownMoveChild(){
+    public PENode setDownMoveChild(boolean calcHeuristic){
         if(!canDownMove()) return null;
         int[][] puzzleArray = getPuzzleArrayClone();
         int row,col;
@@ -370,6 +407,23 @@ public class PENode {
         PENode child = new PENode(this, puzzleArray, row, col);
         //childNodes.add(child);
         child.setDepth(depth+1);
+        if(calcHeuristic) child.setHeuristic(child.calcHeuristic());
         return child;
+    }
+    
+    public PENode setLeftMoveChild(){ return setLeftMoveChild(false);}
+    public PENode setRightMoveChild(){ return setRightMoveChild(false);}
+    public PENode setUpMoveChild(){ return setUpMoveChild(false);}
+    public PENode setDownMoveChild(){ return setDownMoveChild(false);}
+    
+    public static class AStarComparator implements Comparator<PENode>{
+        @Override
+        public int compare(PENode x, PENode y){
+            if ((x.getDepth() + x.getHeuristic()) > (y.getDepth() + y.getHeuristic()))
+                return 1;
+            if ((x.getDepth() + x.getHeuristic()) < (y.getDepth() + y.getHeuristic()))
+                return -1;
+            return 0;
+        }
     }
 }
