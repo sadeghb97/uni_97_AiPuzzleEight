@@ -54,6 +54,11 @@ public class SolvePuzzle {
     
     public static PENode solveWithAStar(PENode node){
         clearNodesStats();
+        
+        int finalState;
+        if(node.isSolvableWithMainGoalState()) finalState=PENode.FIRST_FINAL_STATE;
+        else finalState = PENode.SECOND_FINAL_STATE;
+        
         PriorityQueue<PENode> queue = 
             new PriorityQueue<PENode>(new PENode.AStarComparator());
         queue.add(node);
@@ -64,19 +69,19 @@ public class SolvePuzzle {
             if(parent.isSolved()) return parent;
 
             if(parent.canLeftMove()){
-                queue.add(parent.setLeftMoveChild(true));
+                queue.add(parent.setLeftMoveChild(true, finalState));
                 allNodes++;
             }
             if(parent.canRightMove()){
-                queue.add(parent.setRightMoveChild(true));
+                queue.add(parent.setRightMoveChild(true, finalState));
                 allNodes++;
             }
             if(parent.canUpMove()){
-                queue.add(parent.setUpMoveChild(true));
+                queue.add(parent.setUpMoveChild(true, finalState));
                 allNodes++;
             }
             if(parent.canDownMove()){
-                queue.add(parent.setDownMoveChild(true));
+                queue.add(parent.setDownMoveChild(true, finalState));
                 allNodes++;
             }
         }

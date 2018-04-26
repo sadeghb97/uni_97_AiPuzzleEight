@@ -160,6 +160,9 @@ public class PENode {
                 inputCell(i, j);
             }
         }
+        
+        StylishPrinter.println("\nGenerated Puzzle:", StylishPrinter.ANSI_BOLD_GREEN);
+        printPuzzle();
     }
     
     public void inputCell(int row, int col){
@@ -197,25 +200,46 @@ public class PENode {
         puzzle[row][col] = result;
     }
     
-    public int calcHeuristic(){
+    public int calcHeuristic(int finalState){
         int res=0;
+        int[][] goalArray;
+        if(finalState == FIRST_FINAL_STATE) goalArray=FIRST_GOAL_ARRAY;
+        else goalArray=SECOND_GOAL_ARRAY;
+        
         for(int i=0; 3>i; i++){
             for(int j=0; 3>j; j++){
                 int plus = 0;
-                if(puzzle[i][j]==1) plus=(Math.abs(i-0)+Math.abs(j-0));
-                else if(puzzle[i][j]==2) plus=(Math.abs(i-0)+Math.abs(j-1));
-                else if(puzzle[i][j]==3) plus=(Math.abs(i-0)+Math.abs(j-2));
-                else if(puzzle[i][j]==4) plus=(Math.abs(i-1)+Math.abs(j-0));
-                else if(puzzle[i][j]==5) plus=(Math.abs(i-1)+Math.abs(j-1));
-                else if(puzzle[i][j]==6) plus=(Math.abs(i-1)+Math.abs(j-2));
-                else if(puzzle[i][j]==7) plus=(Math.abs(i-2)+Math.abs(j-0));
-                else if(puzzle[i][j]==8) plus=(Math.abs(i-2)+Math.abs(j-1));
-                else if(puzzle[i][j]==0) plus=(Math.abs(i-2)+Math.abs(j-2));
+                if(puzzle[i][j]==goalArray[0][0]) plus=(Math.abs(i-0)+Math.abs(j-0));
+                else if(puzzle[i][j]==goalArray[0][1]) plus=(Math.abs(i-0)+Math.abs(j-1));
+                else if(puzzle[i][j]==goalArray[0][2]) plus=(Math.abs(i-0)+Math.abs(j-2));
+                else if(puzzle[i][j]==goalArray[1][0]) plus=(Math.abs(i-1)+Math.abs(j-0));
+                else if(puzzle[i][j]==goalArray[1][1]) plus=(Math.abs(i-1)+Math.abs(j-1));
+                else if(puzzle[i][j]==goalArray[1][2]) plus=(Math.abs(i-1)+Math.abs(j-2));
+                else if(puzzle[i][j]==goalArray[2][0]) plus=(Math.abs(i-2)+Math.abs(j-0));
+                else if(puzzle[i][j]==goalArray[2][1]) plus=(Math.abs(i-2)+Math.abs(j-1));
+                else if(puzzle[i][j]==goalArray[2][2]) plus=(Math.abs(i-2)+Math.abs(j-2));
                 res+=plus;
             }
         }
         
         return res;
+    }
+    
+    public boolean isSolvableWithMainGoalState(){
+        int reversion = 0;
+        
+        for(int i=0; 3>i; i++){
+            for(int j=0; 3>j; j++){
+                for(int k=i; 3>k; k++){
+                    for(int l=j; 3>l; l++){
+                        if(puzzle[i][j]>puzzle[k][l]) reversion++;
+                    }
+                }
+            }
+        }
+        
+        if((reversion%2) == 0) return true;
+        return false;
     }
     
     public boolean isSolved(){
@@ -339,7 +363,7 @@ public class PENode {
         return true;
     }
     
-    public PENode setLeftMoveChild(boolean calcHeuristic){
+    public PENode setLeftMoveChild(boolean calcHeuristic, int finalState){
         if(!canLeftMove()) return null;
         int[][] puzzleArray = getPuzzleArrayClone();
         int row,col;
@@ -352,12 +376,12 @@ public class PENode {
         
         PENode child = new PENode(this, puzzleArray, row, col);
         child.setDepth(depth+1);
-        if(calcHeuristic) child.setHeuristic(child.calcHeuristic());
+        if(calcHeuristic) child.setHeuristic(child.calcHeuristic(finalState));
         //childNodes.add(child);
         return child;
     }
     
-    public PENode setRightMoveChild(boolean calcHeuristic){
+    public PENode setRightMoveChild(boolean calcHeuristic, int finalState){
         if(!canRightMove()) return null;
         int[][] puzzleArray = getPuzzleArrayClone();
         int row,col;
@@ -371,11 +395,11 @@ public class PENode {
         PENode child = new PENode(this, puzzleArray, row, col);
         //childNodes.add(child);
         child.setDepth(depth+1);
-        if(calcHeuristic) child.setHeuristic(child.calcHeuristic());
+        if(calcHeuristic) child.setHeuristic(child.calcHeuristic(finalState));
         return child;
     }
     
-    public PENode setUpMoveChild(boolean calcHeuristic){
+    public PENode setUpMoveChild(boolean calcHeuristic, int finalState){
         if(!canUpMove()) return null;
         int[][] puzzleArray = getPuzzleArrayClone();
         int row,col;
@@ -389,11 +413,11 @@ public class PENode {
         PENode child = new PENode(this, puzzleArray, row, col);
         //childNodes.add(child);
         child.setDepth(depth+1);
-        if(calcHeuristic) child.setHeuristic(child.calcHeuristic());
+        if(calcHeuristic) child.setHeuristic(child.calcHeuristic(finalState));
         return child;
     }
     
-    public PENode setDownMoveChild(boolean calcHeuristic){
+    public PENode setDownMoveChild(boolean calcHeuristic, int finalState){
         if(!canDownMove()) return null;
         int[][] puzzleArray = getPuzzleArrayClone();
         int row,col;
@@ -407,14 +431,14 @@ public class PENode {
         PENode child = new PENode(this, puzzleArray, row, col);
         //childNodes.add(child);
         child.setDepth(depth+1);
-        if(calcHeuristic) child.setHeuristic(child.calcHeuristic());
+        if(calcHeuristic) child.setHeuristic(child.calcHeuristic(finalState));
         return child;
     }
     
-    public PENode setLeftMoveChild(){ return setLeftMoveChild(false);}
-    public PENode setRightMoveChild(){ return setRightMoveChild(false);}
-    public PENode setUpMoveChild(){ return setUpMoveChild(false);}
-    public PENode setDownMoveChild(){ return setDownMoveChild(false);}
+    public PENode setLeftMoveChild(){ return setLeftMoveChild(false, 0);}
+    public PENode setRightMoveChild(){ return setRightMoveChild(false, 0);}
+    public PENode setUpMoveChild(){ return setUpMoveChild(false, 0);}
+    public PENode setDownMoveChild(){ return setDownMoveChild(false, 0);}
     
     public static class AStarComparator implements Comparator<PENode>{
         @Override
