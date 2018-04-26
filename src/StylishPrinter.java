@@ -1,3 +1,6 @@
+
+import java.util.Stack;
+
 public class StylishPrinter {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -50,5 +53,29 @@ public class StylishPrinter {
     
     public static void printSpace(int num){
         for(int i=0; num>i; i++) System.out.print(" ");
+    }
+    
+    public static String getFormattedNumber(long number, String splitter){
+        long n = number;
+        Stack stack = new Stack();
+        
+        while(n>0){
+            String piece = String.valueOf(n%1000);
+            if(piece.length()==1) piece = "00" + piece;
+            else if(piece.length()==2) piece = "0" + piece;
+            
+            stack.add(piece);
+            n = n/1000;
+        }
+        
+        StringBuilder strBuilder = new StringBuilder();
+        boolean first = true;
+        while(!stack.empty()){
+            if(first) first=false;
+            else strBuilder.append(splitter);
+            strBuilder.append(stack.pop());
+        }
+        
+        return strBuilder.toString();
     }
 }

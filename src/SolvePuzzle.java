@@ -7,9 +7,9 @@ import java.util.Queue;
 import java.util.Stack;
 
 public class SolvePuzzle {
-    private static int allNodes = 0;
-    private static int curNodes = 0;
-    private static int maxNodes = 0;
+    private static long allNodes = 0;
+    private static long curNodes = 0;
+    private static long maxNodes = 0;
     
     private static void clearNodesStats(){
         allNodes=0;
@@ -17,9 +17,9 @@ public class SolvePuzzle {
         maxNodes=0;
     }
 
-    public static int getAllNodes() {return allNodes;}
-    public static int getCurNodes() {return curNodes;}
-    public static int getMaxNodes() {return maxNodes;}
+    public static long getAllNodes() {return allNodes;}
+    public static long getCurNodes() {return curNodes;}
+    public static long getMaxNodes() {return maxNodes;}
     
     public static PENode solveWithBFS(PENode node){
         clearNodesStats();

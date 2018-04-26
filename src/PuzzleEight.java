@@ -21,7 +21,8 @@ public class PuzzleEight {
         
         StylishPrinter.println("\nPuzzle Solve Successfuly Using BFS!", StylishPrinter.ANSI_BOLD_GREEN);
         System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
-        System.out.println("Created Nodes: " + SolvePuzzle.getAllNodes());
+        String nodesStr = StylishPrinter.getFormattedNumber(SolvePuzzle.getAllNodes(), ",");
+        System.out.println("Created Nodes: " + nodesStr);
         StylishPrinter.println("\nSolving Routine:", StylishPrinter.ANSI_BOLD_GREEN);
         resultNode.printRoutine();
     }
@@ -34,7 +35,8 @@ public class PuzzleEight {
         
         StylishPrinter.println("\nPuzzle Solve Successfuly Using IDS!", StylishPrinter.ANSI_BOLD_GREEN);
         System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
-        System.out.println("Created Nodes: " + SolvePuzzle.getAllNodes());
+        String nodesStr = StylishPrinter.getFormattedNumber(SolvePuzzle.getAllNodes(), ",");
+        System.out.println("Created Nodes: " + nodesStr);
         System.out.println("Max Concurrent Nodes: " + SolvePuzzle.getMaxNodes());
         StylishPrinter.println("\nSolving Routine:", StylishPrinter.ANSI_BOLD_GREEN);
         resultNode.printRoutine();
@@ -52,8 +54,10 @@ public class PuzzleEight {
         if(resultNode!=null){
             StylishPrinter.println("\nPuzzle Solve Successfuly Using DLS!", StylishPrinter.ANSI_BOLD_GREEN);
             System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
-            System.out.println("Created Nodes: " + SolvePuzzle.getAllNodes());
-            System.out.println("Max Concurrent Nodes: " + SolvePuzzle.getMaxNodes());
+            String nodesStr = StylishPrinter.getFormattedNumber(SolvePuzzle.getAllNodes(), ",");
+            String maxNodesStr = StylishPrinter.getFormattedNumber(SolvePuzzle.getAllNodes(), ",");
+            System.out.println("Created Nodes: " + nodesStr);
+            System.out.println("Max Concurrent Nodes: " + maxNodesStr);
             StylishPrinter.println("\nSolving Routine:", StylishPrinter.ANSI_BOLD_GREEN);
             resultNode.printRoutine();
         }
@@ -71,7 +75,8 @@ public class PuzzleEight {
         
         StylishPrinter.println("\nPuzzle Solve Successfuly Using A*!", StylishPrinter.ANSI_BOLD_GREEN);
         System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
-        System.out.println("Created Nodes: " + SolvePuzzle.getAllNodes());
+        String nodesStr = StylishPrinter.getFormattedNumber(SolvePuzzle.getAllNodes(), ",");
+        System.out.println("Created Nodes: " + nodesStr);
         StylishPrinter.println("\nSolving Routine:", StylishPrinter.ANSI_BOLD_GREEN);
         resultNode.printRoutine();
     }
