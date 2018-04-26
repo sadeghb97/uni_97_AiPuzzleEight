@@ -1,4 +1,4 @@
-
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,22 +10,13 @@ public class SolvePuzzle {
     private static long allNodes = 0;
     private static long curNodes = 0;
     private static long maxNodes = 0;
-    
-    private static void clearNodesStats(){
-        allNodes=0;
-        curNodes=0;
-        maxNodes=0;
-    }
-
-    public static long getAllNodes() {return allNodes;}
-    public static long getCurNodes() {return curNodes;}
-    public static long getMaxNodes() {return maxNodes;}
+    public final static int EACH_NODES_PRINT = 50000000;
     
     public static PENode solveWithBFS(PENode node){
         clearNodesStats();
         Queue<PENode> queue = new LinkedList<PENode>();
         queue.add(node);
-        allNodes++;
+        incrementNodes();
         
         while(queue.size() != 0){
             PENode parent = queue.poll();
@@ -33,19 +24,19 @@ public class SolvePuzzle {
 
             if(parent.canLeftMove()){
                 queue.add(parent.setLeftMoveChild());
-                allNodes++;
+                incrementNodes();
             }
             if(parent.canRightMove()){
                 queue.add(parent.setRightMoveChild());
-                allNodes++;
+                incrementNodes();
             }
             if(parent.canUpMove()){
                 queue.add(parent.setUpMoveChild());
-                allNodes++;
+                incrementNodes();
             }
             if(parent.canDownMove()){
                 queue.add(parent.setDownMoveChild());
-                allNodes++;
+                incrementNodes();
             }
         }
         
@@ -62,7 +53,7 @@ public class SolvePuzzle {
         PriorityQueue<PENode> queue = 
             new PriorityQueue<PENode>(new PENode.AStarComparator());
         queue.add(node);
-        allNodes++;
+        incrementNodes();
         
         while(queue.size() != 0){
             PENode parent = queue.remove();
@@ -70,19 +61,19 @@ public class SolvePuzzle {
 
             if(parent.canLeftMove()){
                 queue.add(parent.setLeftMoveChild(true, finalState));
-                allNodes++;
+                incrementNodes();
             }
             if(parent.canRightMove()){
                 queue.add(parent.setRightMoveChild(true, finalState));
-                allNodes++;
+                incrementNodes();
             }
             if(parent.canUpMove()){
                 queue.add(parent.setUpMoveChild(true, finalState));
-                allNodes++;
+                incrementNodes();
             }
             if(parent.canDownMove()){
                 queue.add(parent.setDownMoveChild(true, finalState));
-                allNodes++;
+                incrementNodes();
             }
         }
         
@@ -110,7 +101,7 @@ public class SolvePuzzle {
     
     private static PENode dlsExpandNode(PENode node, int l){
         if(node==null) return null;
-        allNodes++;
+        incrementNodes();
         curNodes++;
         
         if(curNodes>maxNodes) maxNodes=curNodes;
@@ -166,4 +157,25 @@ public class SolvePuzzle {
             }
         }
     }*/
+    
+    private static void clearNodesStats(){
+        allNodes=0;
+        curNodes=0;
+        maxNodes=0;
+    }
+    
+    private static void incrementNodes(){
+        allNodes++;
+        if((allNodes%EACH_NODES_PRINT) == 0 && allNodes>0){
+            if((allNodes% (30*EACH_NODES_PRINT + EACH_NODES_PRINT)) == 0 || allNodes==EACH_NODES_PRINT)
+                System.out.println("");
+            else if((allNodes% (10*EACH_NODES_PRINT + EACH_NODES_PRINT)) == 0)
+                System.out.print(" ");
+            System.out.print("*");
+        }
+    }
+
+    public static long getAllNodes() {return allNodes;}
+    public static long getCurNodes() {return curNodes;}
+    public static long getMaxNodes() {return maxNodes;}
 }

@@ -61,8 +61,10 @@ public class StylishPrinter {
         
         while(n>0){
             String piece = String.valueOf(n%1000);
-            if(piece.length()==1) piece = "00" + piece;
-            else if(piece.length()==2) piece = "0" + piece;
+            if(n>=1000){
+                if(piece.length()==1) piece = "00" + piece;
+                else if(piece.length()==2) piece = "0" + piece;
+            }
             
             stack.add(piece);
             n = n/1000;

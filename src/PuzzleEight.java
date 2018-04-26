@@ -19,6 +19,7 @@ public class PuzzleEight {
         long endTime = System.nanoTime();
         double secTime = (double)(endTime - startTime)/1000000000;
         
+        if(SolvePuzzle.getAllNodes()>=SolvePuzzle.EACH_NODES_PRINT) System.out.println("");
         StylishPrinter.println("\nPuzzle Solve Successfuly Using BFS!", StylishPrinter.ANSI_BOLD_GREEN);
         System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
         String nodesStr = StylishPrinter.getFormattedNumber(SolvePuzzle.getAllNodes(), ",");
@@ -33,6 +34,7 @@ public class PuzzleEight {
         long endTime = System.nanoTime();
         double secTime = (double)(endTime - startTime)/1000000000;
         
+        if(SolvePuzzle.getAllNodes()>=SolvePuzzle.EACH_NODES_PRINT) System.out.println("");
         StylishPrinter.println("\nPuzzle Solve Successfuly Using IDS!", StylishPrinter.ANSI_BOLD_GREEN);
         System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
         String nodesStr = StylishPrinter.getFormattedNumber(SolvePuzzle.getAllNodes(), ",");
@@ -50,6 +52,8 @@ public class PuzzleEight {
         PENode resultNode = SolvePuzzle.solveWithDLS(currentPuzzle.unlink(), l);
         long endTime = System.nanoTime();
         double secTime = (double)(endTime - startTime)/1000000000;
+        
+        if(SolvePuzzle.getAllNodes()>=SolvePuzzle.EACH_NODES_PRINT) System.out.println("");
         
         if(resultNode!=null){
             StylishPrinter.println("\nPuzzle Solve Successfuly Using DLS!", StylishPrinter.ANSI_BOLD_GREEN);
@@ -73,6 +77,7 @@ public class PuzzleEight {
         long endTime = System.nanoTime();
         double secTime = (double)(endTime - startTime)/1000000000;
         
+        if(SolvePuzzle.getAllNodes()>=SolvePuzzle.EACH_NODES_PRINT) System.out.println("");
         StylishPrinter.println("\nPuzzle Solve Successfuly Using A*!", StylishPrinter.ANSI_BOLD_GREEN);
         System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
         String nodesStr = StylishPrinter.getFormattedNumber(SolvePuzzle.getAllNodes(), ",");
