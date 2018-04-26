@@ -7,42 +7,85 @@ import java.util.Queue;
 import java.util.Stack;
 
 public class SolvePuzzle {
+    private static int allNodes = 0;
+    private static int curNodes = 0;
+    private static int maxNodes = 0;
+    
+    private static void clearNodesStats(){
+        allNodes=0;
+        curNodes=0;
+        maxNodes=0;
+    }
+
+    public static int getAllNodes() {return allNodes;}
+    public static int getCurNodes() {return curNodes;}
+    public static int getMaxNodes() {return maxNodes;}
+    
     public static PENode solveWithBFS(PENode node){
+        clearNodesStats();
         Queue<PENode> queue = new LinkedList<PENode>();
         queue.add(node);
+        allNodes++;
         
         while(queue.size() != 0){
             PENode parent = queue.poll();
             if(parent.isSolved()) return parent;
 
-            if(parent.canLeftMove()) queue.add(parent.setLeftMoveChild());
-            if(parent.canRightMove()) queue.add(parent.setRightMoveChild());
-            if(parent.canUpMove()) queue.add(parent.setUpMoveChild());
-            if(parent.canDownMove()) queue.add(parent.setDownMoveChild());
+            if(parent.canLeftMove()){
+                queue.add(parent.setLeftMoveChild());
+                allNodes++;
+            }
+            if(parent.canRightMove()){
+                queue.add(parent.setRightMoveChild());
+                allNodes++;
+            }
+            if(parent.canUpMove()){
+                queue.add(parent.setUpMoveChild());
+                allNodes++;
+            }
+            if(parent.canDownMove()){
+                queue.add(parent.setDownMoveChild());
+                allNodes++;
+            }
         }
         
         return null;
     }
     
     public static PENode solveWithAStar(PENode node){
+        clearNodesStats();
         PriorityQueue<PENode> queue = 
             new PriorityQueue<PENode>(new PENode.AStarComparator());
         queue.add(node);
+        allNodes++;
         
         while(queue.size() != 0){
             PENode parent = queue.remove();
             if(parent.isSolved()) return parent;
 
-            if(parent.canLeftMove()) queue.add(parent.setLeftMoveChild(true));
-            if(parent.canRightMove()) queue.add(parent.setRightMoveChild(true));
-            if(parent.canUpMove()) queue.add(parent.setUpMoveChild(true));
-            if(parent.canDownMove()) queue.add(parent.setDownMoveChild(true));
+            if(parent.canLeftMove()){
+                queue.add(parent.setLeftMoveChild(true));
+                allNodes++;
+            }
+            if(parent.canRightMove()){
+                queue.add(parent.setRightMoveChild(true));
+                allNodes++;
+            }
+            if(parent.canUpMove()){
+                queue.add(parent.setUpMoveChild(true));
+                allNodes++;
+            }
+            if(parent.canDownMove()){
+                queue.add(parent.setDownMoveChild(true));
+                allNodes++;
+            }
         }
         
         return null;
     }
     
     public static PENode solveWithDLS(PENode node, int l){
+        clearNodesStats();
         PENode peNode = node;
         peNode.unlink();
         PENode resNode = dlsExpandNode(peNode, l);
@@ -50,7 +93,9 @@ public class SolvePuzzle {
     } 
     
     public static PENode solveWithIDS(PENode node){
+        clearNodesStats();
         for(int l=1; true; l++){
+            curNodes=0;
             PENode peNode = node;
             peNode.unlink();
             PENode resNode = dlsExpandNode(peNode, l);
@@ -59,9 +104,18 @@ public class SolvePuzzle {
     }
     
     private static PENode dlsExpandNode(PENode node, int l){
-        if(node==null) return null; 
+        if(node==null) return null;
+        allNodes++;
+        curNodes++;
+        
+        if(curNodes>maxNodes) maxNodes=curNodes;
         if(node.isSolved()) return node;
-        if(node.getDepth()>=l) return null;
+        if(node.getDepth()>=l){
+            node.unlink();
+            node = null;
+            curNodes--;
+            return null;
+        }
         
         PENode left,right,up,down;
         
@@ -80,6 +134,7 @@ public class SolvePuzzle {
         //if(node.getFatherNode()!=null) node.getFatherNode().getChildNodes().remove(node);
         node.unlink();
         node = null;
+        curNodes--;
         
         return null;
     }

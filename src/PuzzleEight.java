@@ -21,6 +21,7 @@ public class PuzzleEight {
         
         StylishPrinter.println("\nPuzzle Solve Successfuly Using BFS!", StylishPrinter.ANSI_BOLD_GREEN);
         System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
+        System.out.println("Created Nodes: " + SolvePuzzle.getAllNodes());
         StylishPrinter.println("\nSolving Routine:", StylishPrinter.ANSI_BOLD_GREEN);
         resultNode.printRoutine();
     }
@@ -33,6 +34,8 @@ public class PuzzleEight {
         
         StylishPrinter.println("\nPuzzle Solve Successfuly Using IDS!", StylishPrinter.ANSI_BOLD_GREEN);
         System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
+        System.out.println("Created Nodes: " + SolvePuzzle.getAllNodes());
+        System.out.println("Max Concurrent Nodes: " + SolvePuzzle.getMaxNodes());
         StylishPrinter.println("\nSolving Routine:", StylishPrinter.ANSI_BOLD_GREEN);
         resultNode.printRoutine();
     }
@@ -49,6 +52,8 @@ public class PuzzleEight {
         if(resultNode!=null){
             StylishPrinter.println("\nPuzzle Solve Successfuly Using DLS!", StylishPrinter.ANSI_BOLD_GREEN);
             System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
+            System.out.println("Created Nodes: " + SolvePuzzle.getAllNodes());
+            System.out.println("Max Concurrent Nodes: " + SolvePuzzle.getMaxNodes());
             StylishPrinter.println("\nSolving Routine:", StylishPrinter.ANSI_BOLD_GREEN);
             resultNode.printRoutine();
         }
@@ -66,6 +71,7 @@ public class PuzzleEight {
         
         StylishPrinter.println("\nPuzzle Solve Successfuly Using A*!", StylishPrinter.ANSI_BOLD_GREEN);
         System.out.println("Solving Time: " + new DecimalFormat("#.###").format(secTime) + "s");
+        System.out.println("Created Nodes: " + SolvePuzzle.getAllNodes());
         StylishPrinter.println("\nSolving Routine:", StylishPrinter.ANSI_BOLD_GREEN);
         resultNode.printRoutine();
     }
